@@ -40,7 +40,7 @@
 
             <v-menu activator="parent">
               <v-list>
-                <v-list-item link to="/profile">
+                <v-list-item link @click="routeToProfile">
                   <v-list-item-title>
                     <v-icon size="32" class="ml-2">mdi-account-circle</v-icon>
                     Rayven Clores
@@ -165,6 +165,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data() {
     return {
@@ -184,6 +186,13 @@ export default {
         this.newComment = "";
       }
     },
+
+    routeToProfile(){
+      const userId = this.$route.params.userId;
+
+      this.$router.push(`/home/${response.data.userId}`);
+
+    }
   },
 };
 </script>

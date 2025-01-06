@@ -13,22 +13,33 @@
               <v-col cols="2">
                 <img
                   style="
-                    width: 100px;
+                    width: 120px;
+                    height: 120px;
                     border-radius: 50%;
                     background-color: gray;
                   "
-                  src="../assets/logo.png"
-                  alt=""
+                  :src="user.profilePicture"
+                  alt="Profile Picture"
                 />
               </v-col>
 
               <v-col cols="9" style="padding: 16px 0">
-                <h2 style="margin-top: 20px">Rayven Clores</h2>
-                <p>Hello World!</p>
+                <v-card-title
+                  style="
+                    margin-top: 20px;
+                    padding-left: 0;
+                    font-weight: bold;
+                    font-size: 30px;
+                  "
+                  >{{ user.firstName }} {{ user.lastName }}</v-card-title
+                >
+                <v-card-text style="padding-left: 0">{{
+                  user.bio
+                }}</v-card-text>
               </v-col>
 
               <v-col cols="1">
-                <v-btn icon @click="goBack" to="/home">
+                <v-btn icon @click="routeToHome">
                   <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
               </v-col>
@@ -56,7 +67,9 @@
             :value="1"
             style="width: 100%"
           >
-            <v-container style="padding-top: 0"> <ProfilePostComponents /> </v-container>
+            <v-container style="padding-top: 0">
+              <PostComponents />
+            </v-container>
           </v-tabs-window-item>
 
           <v-tabs-window-item
@@ -65,8 +78,10 @@
             :value="2"
             style="width: 100%"
           >
-          <v-container style="padding-top: 0"> <FriendsComponents /> </v-container>
-        </v-tabs-window-item>
+            <v-container style="padding-top: 0">
+              <FriendsComponents />
+            </v-container>
+          </v-tabs-window-item>
 
           <v-tabs-window-item
             v-if="tabs === 3"
@@ -74,7 +89,9 @@
             :value="3"
             style="width: 100%"
           >
-          <v-container style="padding-top: 0"> <AboutComponents /> </v-container>
+            <v-container style="padding-top: 0">
+              <AboutComponents />
+            </v-container>
           </v-tabs-window-item>
         </v-tabs-window>
       </v-card>
@@ -85,28 +102,64 @@
 </template>
 
 <script>
-
+import axios from "axios";
 export default {
   data() {
     return {
       tabs: 1,
-      showComments: false,
-      newComment: "",
-      comments: [],
-      postUser: "Rayven Clores",
-      postDate: new Date().toLocaleDateString(),
+      user: {},
     };
   },
   methods: {
-    toggleComments() {
-      this.showComments = !this.showComments;
+    routeToHome() {
+      const userId = this.$route.params.userId;
+      this.$router.push(`/home/${userId}`);
     },
-    addComment() {
-      if (this.newComment.trim() !== "") {
-        this.comments.push(this.newComment.trim());
-        this.newComment = "";
-      }
+    fetchUser() {
+      const userId = this.$route.params.userId;
+
+      axios
+        .get(`http://127.0.0.1:8000/api/user/${userId}`)
+        .then((response) => {
+          if (response.data.statusCode === 200) {
+            this.user = response.data.data;
+
+            console.log(this.user);
+          } else {
+            console.error(response.data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching user:", error);
+        });
     },
+
+    fetchProfile() {
+      const userId = this.$route.params.userId;
+
+      axios
+        .get(`http://127.0.0.1:8000/api/user/profile/${userId}`, {
+          responseType: "arraybuffer",
+        }) // Set responseType to 'arraybuffer'
+        .then((response) => {
+          if (response.status === 200) {
+            // Convert the arraybuffer to a blob
+            const imageBlob = new Blob([response.data], { type: "image/jpeg" }); // Adjust type based on your image type
+            const imageUrl = URL.createObjectURL(imageBlob); // Create an object URL for the image
+            this.user.profilePicture = imageUrl; // Assuming the user object has a profilePicture property
+            console.log(this.user);
+          } else {
+            console.error(response.data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching user profile picture:", error);
+        });
+    },
+  },
+  created() {
+    this.fetchUser();
+    this.fetchProfile();
   },
 };
 </script>

@@ -11,10 +11,10 @@ import 'vuetify/styles'
 // Import Vuetify Labs components
 import { VCalendar } from 'vuetify/labs/VCalendar'
 import { VDateInput } from 'vuetify/labs/VDateInput'
+import { VFileUpload } from 'vuetify/labs/VFileUpload'
 
 // Composables
 import { createVuetify } from 'vuetify'
-import { VFileUpload } from 'vuetify/labs/components'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
