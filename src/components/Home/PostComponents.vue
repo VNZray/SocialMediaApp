@@ -1,5 +1,4 @@
 <template>
-  <div>
     <v-card
       elevation="4"
       style="padding: 30px; margin-top: 20px; width: 100%"
@@ -31,7 +30,7 @@
             </v-row>
           </v-col>
 
-          <v-col cols="1" style="padding-right: 0;">
+          <v-col cols="1" style="padding-right: 0">
             <v-menu>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn icon v-bind="attrs" v-on="on">
@@ -58,7 +57,7 @@
 
         <!-- Post Content -->
         <v-row>
-          <v-card width="100%" style="height: 600px;">
+          <v-card width="100%" style="height: 600px">
             <img width="100%" height="100%" :src="post.image" alt="" />
           </v-card>
         </v-row>
@@ -66,10 +65,11 @@
 
         <!-- Reactions Section -->
         <v-row>
-          <v-card elevation="0" style="padding: 10px 0">
+          <v-card elevation="0" style="padding: 10px 0; width: 30%">
             <v-row>
               <v-col>
-                <v-icon size="32" color="red">mdi-heart</v-icon> 100
+                <v-icon @click="updateReactCounter(post.postId, post.reactionCount + 1)" size="32" color="red">mdi-heart</v-icon>
+                {{ post.reactionCount }}
               </v-col>
               <v-col>
                 <v-icon size="32" color="blue" @click="toggleComments"
@@ -126,7 +126,6 @@
         </v-row>
       </v-col>
     </v-card>
-  </div>
 </template>
 
 <script>
@@ -218,6 +217,21 @@ export default {
         })
         .catch((error) => {
           console.error("Error fetching user profile picture:", error);
+        });
+    },
+    updateReactCounter(postId, reactionCount) {
+      axios
+        .put(`/post/react/${postId}`, {
+          reactionCount: reactionCount, // Integer value
+        })
+        .then((response) => {
+          console.log("Reaction counter updated successfully:", response.data);
+        })
+        .catch((error) => {
+          console.error(
+            "Error updating reaction counter:",
+            error.response?.data || error.message
+          );
         });
     },
   },

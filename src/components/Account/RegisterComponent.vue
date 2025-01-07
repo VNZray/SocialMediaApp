@@ -205,24 +205,24 @@ export default {
         "Brazil",
       ],
 
-      confirmPassword: "1234",
+      confirmPassword: "",
       passwordMismatch: "",
 
       user: {
-        first_name: "Rayven", // Changed to snake_case
+        first_name: "", // Changed to snake_case
         middle_name: "", // Changed to snake_case
-        last_name: "Clores", // Changed to snake_case
-        birthdate: "2003-09-28",
-        age: 21,
-        gender: "Male",
-        country: "Philippines",
-        province: "Camarines Sur",
-        hometown: "Caramoan",
-        brgy: "Paniman",
+        last_name: "", // Changed to snake_case
+        birthdate: "",
+        age: "",
+        gender: null,
+        country: null,
+        province: null,
+        hometown: null,
+        brgy: null,
         profile_picture: null, // Changed to snake_case
-        email: "rclores666@gmail.com",
-        contact_no: "09380417303", // Changed to snake_case
-        password: "1234",
+        email: "",
+        contact_no: "", // Changed to snake_case
+        password: "",
       },
 
       provinces: [
@@ -365,6 +365,7 @@ export default {
         }
       } catch (error) {
         console.error("Error creating account:", error.response || error);
+        alert("Manually modify the type of image_data to mediumblob or longblob in xampp php admin");
       }
     },
   },

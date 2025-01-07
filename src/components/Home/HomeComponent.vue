@@ -70,7 +70,7 @@
       <v-card elevation="0" style="padding: 0; margin: 5px 0px">
         <v-tabs-window v-model="tabs">
           <v-tabs-window-item v-if="tabs === 1" :key="1" :value="1">
-            <v-container style="padding-top: 0; padding-bottom: ">
+            <v-container style="padding-top: 0;">
               <CreatePostComponent />
               <PostComponents />
             </v-container>

@@ -83,6 +83,7 @@ export default {
         }
       } catch (error) {
         console.error("Error posting:", error.response || error);
+        alert("Manually modify the type of image_data to mediumblob or longblob in xampp php admin");
       }
     },
   },
