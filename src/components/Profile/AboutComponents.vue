@@ -404,12 +404,12 @@
       <v-col v-if="isEditing" style="padding: 0">
         <v-row style="margin: 20px 0 0 0">
           <v-col style="padding-left: 0">
-            <v-btn width="100%" @click="isEditing = false" color="red"
+            <v-btn variant="tonal" width="100%" @click="isEditing = false" color="red"
               >Cancel Edit</v-btn
             >
           </v-col>
           <v-col style="padding-right: 0">
-            <v-btn type="submit" width="100%" color="primary"
+            <v-btn variant="tonal" type="submit" width="100%" color="primary"
               >Save Changes</v-btn
             >
           </v-col>
@@ -419,19 +419,19 @@
 
     <v-card elevation="4" style="padding: 30px; margin: 20px 10px; width: 100%">
       <v-row style="margin: 20px 0">
-        <v-btn width="100%" @click="isEditing = true" color="secondary"
+        <v-btn variant="tonal" width="100%" @click="isEditing = true" color="secondary"
           >Edit Profile</v-btn
         >
       </v-row>
 
       <v-row style="margin: 20px 0">
-        <v-btn width="100%" color="red" @click="deleteUser"
+        <v-btn variant="tonal" width="100%" color="red" @click="deleteUser"
           >Delete Profile</v-btn
         >
       </v-row>
 
       <v-row style="margin: 20px 0">
-        <v-btn width="100%" color="white">Log Out</v-btn>
+        <v-btn variant="tonal" width="100%" >Log Out</v-btn>
       </v-row>
     </v-card>
   </form>
@@ -455,7 +455,7 @@ export default {
         .get(`http://127.0.0.1:8000/api/user/${userId}`)
         .then((response) => {
           if (response.data.statusCode === 200) {
-            this.user = response.data.data;
+            this.user = response.data.data.userDetails;
           } else {
             console.error(response.data.message);
           }

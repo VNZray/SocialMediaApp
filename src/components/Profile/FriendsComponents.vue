@@ -3,9 +3,8 @@
     <v-col>
       <v-row align="center" justify="space-between">
         <!-- Left Section: User Info -->
-        <v-row align="center">
 
-        </v-row>
+
         
       </v-row>
     </v-col>
@@ -27,6 +26,7 @@ export default {
     toggleComments() {
       this.showComments = !this.showComments;
     },
+    
     addComment() {
       if (this.newComment.trim() !== "") {
         this.comments.push(this.newComment.trim());

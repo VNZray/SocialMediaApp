@@ -18,8 +18,8 @@
                     border-radius: 50%;
                     background-color: gray;
                   "
-                  :src="user.profilePicture"
-                  alt="Profile Picture"
+  :src="profilePicture"
+  alt="Profile Picture"
                 />
               </v-col>
 
@@ -100,14 +100,15 @@
     <v-col cols="3"> </v-col>
   </v-row>
 </template>
-
 <script>
 import axios from "axios";
+
 export default {
   data() {
     return {
       tabs: 1,
-      user: {},
+      user: {}, // Initialize user as an empty object
+      profilePicture: "", // Initialize profilePicture
     };
   },
   methods: {
@@ -117,49 +118,21 @@ export default {
     },
     fetchUser() {
       const userId = this.$route.params.userId;
-
       axios
         .get(`http://127.0.0.1:8000/api/user/${userId}`)
         .then((response) => {
-          if (response.data.statusCode === 200) {
-            this.user = response.data.data;
-
-            console.log(this.user);
-          } else {
-            console.error(response.data.message);
-          }
+          const { userDetails, profilePicture } = response.data.data;
+          this.user = userDetails; // Assign user details
+          this.profilePicture = profilePicture; // Assign profile picture
+          console.log(this.profilePicture); // Debugging: Confirm the profile picture value
         })
         .catch((error) => {
           console.error("Error fetching user:", error);
         });
     },
-
-    fetchProfile() {
-      const userId = this.$route.params.userId;
-
-      axios
-        .get(`http://127.0.0.1:8000/api/user/profile/${userId}`, {
-          responseType: "arraybuffer",
-        }) // Set responseType to 'arraybuffer'
-        .then((response) => {
-          if (response.status === 200) {
-            // Convert the arraybuffer to a blob
-            const imageBlob = new Blob([response.data], { type: "image/jpeg" }); // Adjust type based on your image type
-            const imageUrl = URL.createObjectURL(imageBlob); // Create an object URL for the image
-            this.user.profilePicture = imageUrl; // Assuming the user object has a profilePicture property
-            console.log(this.user);
-          } else {
-            console.error(response.data.message);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching user profile picture:", error);
-        });
-    },
   },
   created() {
-    this.fetchUser();
-    this.fetchProfile();
+    this.fetchUser(); // Fetch user data on component creation
   },
 };
 </script>

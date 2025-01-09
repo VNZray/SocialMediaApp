@@ -2,15 +2,8 @@
   <v-card elevation="3" height="50px auto" style="padding: 14px 0">
     <v-row>
       <v-col cols="3" style="padding-left: 28px">
-        <v-text-field
-          prepend-inner-icon="mdi-magnify"
-          placeholder="Search"
-          variant="outlined"
-          outlined
-          dense
-          hide-details
-          class="search"
-        ></v-text-field>
+        <v-text-field prepend-inner-icon="mdi-magnify" placeholder="Search" variant="outlined" outlined dense
+          hide-details class="search"></v-text-field>
       </v-col>
 
       <v-col cols="6">
@@ -37,14 +30,14 @@
           <v-btn style="height: 100%" elevation="0">
             {{ user.firstName }} {{ user.lastName }}
             <v-avatar style="margin-left: 10px;" size="40">
-              <img style="width: 40px;" :src="user.profilePicture" alt="Profile Picture" />
+              <img style="width: 40px;" :src="userProfile.profilePicture" alt="Profile Picture" />
             </v-avatar>
             <v-menu activator="parent">
               <v-list>
                 <v-list-item link @click="routeToProfile">
                   <v-list-item-title>
                     <v-avatar size="40">
-                      <img :src="user.profilePicture" style="width: 40px;" alt="Profile Picture" />
+                      <img :src="userProfile.profilePicture" style="width: 40px;" alt="Profile Picture" />
                     </v-avatar>
                     {{ user.firstName }} {{ user.lastName }}
                   </v-list-item-title>
@@ -77,7 +70,10 @@
           </v-tabs-window-item>
 
           <v-tabs-window-item v-if="tabs === 2" :key="2" :value="2">
-            Friends
+            <v-container style="padding-top: 0;">
+              <FriendRequest />
+              <FriendSuggestion :users="filteredUsers" />
+            </v-container>
           </v-tabs-window-item>
           <v-tabs-window-item v-if="tabs === 3" :key="3" :value="3">
             Videos
@@ -96,6 +92,8 @@
 <script>
 import axios from "axios";
 export default {
+  props: ['users'], // Accept the users prop here
+
   data() {
     return {
       tabs: 1,
@@ -105,6 +103,8 @@ export default {
       postUser: "Rayven Clores",
       postDate: new Date().toLocaleDateString(), // Example date, can be dynamic
       user: {},
+      userProfile: {},
+      users: [], // Add this line to initialize the users array
     };
   },
   methods: {
@@ -124,14 +124,12 @@ export default {
 
     fetchUser() {
       const userId = this.$route.params.userId;
-
       axios
         .get(`http://127.0.0.1:8000/api/user/${userId}`)
         .then((response) => {
           if (response.data.statusCode === 200) {
-            this.user = response.data.data;
-
-            console.log(this.user);
+            this.userProfile = response.data.data;
+            this.user = response.data.data.userDetails;
           } else {
             console.error(response.data.message);
           }
@@ -140,34 +138,33 @@ export default {
           console.error("Error fetching user:", error);
         });
     },
+    async fetchUsers() {
+      try {
+        const response = await axios.get("/users"); // Endpoint to get all users
+        if (response.data.statusCode === 200) {
+          const userId = String(this.$route.params.userId);  // Ensure userId is a string
 
-    fetchProfile() {
+          // Filter out the user with the specified userId
+          this.users = response.data.data.filter(user => String(user.userId) !== userId);
+        } else {
+          console.error("No users found or an error occurred.");
+        }
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    },
+  },
+  computed: {
+    filteredUsers() {
       const userId = this.$route.params.userId;
-
-      axios
-        .get(`http://127.0.0.1:8000/api/user/profile/${userId}`, {
-          responseType: "arraybuffer",
-        }) // Set responseType to 'arraybuffer'
-        .then((response) => {
-          if (response.status === 200) {
-            // Convert the arraybuffer to a blob
-            const imageBlob = new Blob([response.data], { type: "image/jpeg" }); // Adjust type based on your image type
-            const imageUrl = URL.createObjectURL(imageBlob); // Create an object URL for the image
-            this.user.profilePicture = imageUrl; // Assuming the user object has a profilePicture property
-            console.log(this.user);
-          } else {
-            console.error(response.data.message);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching user profile picture:", error);
-        });
+      return this.users.filter(user => user.userId !== userId);
     },
   },
 
   created() {
     this.fetchUser();
-    this.fetchProfile();
+    // this.fetchProfile();
+    this.fetchUsers();
   },
 };
 </script>
