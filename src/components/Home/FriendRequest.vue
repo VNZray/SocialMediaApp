@@ -8,7 +8,7 @@
             </v-row>
 
             <v-row v-for="(request, index) in friendRequests" :key="index">
-                <v-col >
+                <v-col>
                     <v-card style="width: 100%; padding-top: 15px; padding-bottom: 15px" elevation="0">
                         <v-row>
                             <v-col cols="1" style="padding-top: 16px; padding-bottom: 16px">
@@ -25,14 +25,13 @@
                             </v-col>
 
                             <v-col cols="3" style="padding-left: 0; padding-top: 16px; padding-bottom: 16px">
-                                <v-btn @click="deleteRequest(request.friendshipId)" style="height: 70%;" width="100%"
+                                <v-btn c style="height: 70%;" width="100%"
                                     color="grey">Delete Request</v-btn>
                             </v-col>
 
-                            <v-col cols="3"
-                                style="padding-left: 0; padding-top: 16px; padding-bottom: 16px">
-                                <v-btn variant="outlined" @click="acceptRequest(request.friendshipId)" style="height: 70%;" width="100%"
-                                    color="primary">Confirm</v-btn>
+                            <v-col cols="3" style="padding-left: 0; padding-top: 16px; padding-bottom: 16px">
+                                <v-btn variant="outlined" @click="acceptRequest(request.friendshipId)"
+                                    style="height: 70%;" width="100%" color="primary">Confirm</v-btn>
                             </v-col>
                         </v-row>
 
@@ -99,30 +98,29 @@ export default {
         },
 
         fetchUser(requesterId, requestIndex) {
-      axios
-        .get(`http://127.0.0.1:8000/api/user/${requesterId}`)
-        .then((response) => {
-          if (response.status === 200) {
-            const userDetails = response.data.data.userDetails;
-            const profilePicture = response.data.data.profilePicture;
-            this.friendRequests[requestIndex] = {
-              ...this.friendRequests[requestIndex],
-                firstName: userDetails.firstName,
-                lastName: userDetails.lastName,
-                profilePicture: profilePicture,
-            };
-            console.log(
-              `User details updated for post index ${requestIndex}:`,
-              this.friendRequests[requestIndex]
-            );
-            
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching user details:", error);
-        });
-    },
+            axios
+                .get(`http://127.0.0.1:8000/api/user/${requesterId}`)
+                .then((response) => {
+                    if (response.status === 200) {
+                        const userDetails = response.data.data.userDetails;
+                        const profilePicture = response.data.data.profilePicture;
+                        this.friendRequests[requestIndex] = {
+                            ...this.friendRequests[requestIndex],
+                            firstName: userDetails.firstName,
+                            lastName: userDetails.lastName,
+                            profilePicture: profilePicture,
+                        };
+                        console.log(
+                            `User details updated for post index ${requestIndex}:`,
+                            this.friendRequests[requestIndex]
+                        );
 
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error fetching user details:", error);
+                });
+        },
         async deleteRequest(requestId) {
             try {
                 await axios.delete(`/friendship/cancel/${requestId}`);
@@ -131,9 +129,9 @@ export default {
                 this.error = 'Failed to delete friend request';
             }
         },
-        async acceptRequest(requestId) {
+        async acceptRequest(friendshipId) {
             try {
-                await axios.post(`/friendship/accept/${requestId}`);
+                await axios.put(`/friendship/accept/${friendshipId}`);
                 this.getFriendRequests(); // Refresh the list after acceptance
             } catch (error) {
                 this.error = 'Failed to accept friend request';

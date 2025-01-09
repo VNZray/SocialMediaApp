@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="updateProfile" method="post">
-    <v-card elevation="4" style="padding: 30px; margin: 20px 10px; width: 100%">
+    <v-card elevation="4" style="padding: 30px; margin: 20px 0; width: 100%">
       <v-col>
         <v-row>
           <v-card-title style="padding-left: 0">

@@ -5,34 +5,24 @@
     <v-col cols="6">
       <v-card elevation="0" style="padding: 0; margin: 0px">
         <v-container style="padding-top: 0; padding-bottom: 0">
-          <v-card
-            elevation="4"
-            style="padding: 30px; margin: 0px 10px; width: 100%"
-          >
+          <v-card elevation="4" style="padding: 30px; margin-top: 20px; margin-bottom: 20px; width: 100%">
             <v-row>
               <v-col cols="2">
-                <img
-                  style="
+                <img style="
                     width: 120px;
                     height: 120px;
                     border-radius: 50%;
                     background-color: gray;
-                  "
-  :src="profilePicture"
-  alt="Profile Picture"
-                />
+                  " :src="profilePicture" alt="Profile Picture" />
               </v-col>
 
               <v-col cols="9" style="padding: 16px 0">
-                <v-card-title
-                  style="
+                <v-card-title style="
                     margin-top: 20px;
                     padding-left: 0;
                     font-weight: bold;
                     font-size: 30px;
-                  "
-                  >{{ user.firstName }} {{ user.lastName }}</v-card-title
-                >
+                  ">{{ user.firstName }} {{ user.lastName }}</v-card-title>
                 <v-card-text style="padding-left: 0">{{
                   user.bio
                 }}</v-card-text>
@@ -48,10 +38,7 @@
         </v-container>
 
         <v-container style="padding-top: 0; padding-bottom: 0px">
-          <v-card
-            elevation="4"
-            style="padding: 0px; margin: 0px 10px; width: 100%; height: 50px"
-          >
+          <v-card elevation="4" style="padding: 0px; margin: 0px; width: 100%; height: 50px">
             <v-tabs v-model="tabs" color="primary" grow style="height: 100%">
               <v-tab style="height: 100%" :value="1"> Posts </v-tab>
               <v-tab style="height: 100%" :value="2"> Friends </v-tab>
@@ -61,34 +48,19 @@
         </v-container>
 
         <v-tabs-window v-model="tabs" style="width: 100%">
-          <v-tabs-window-item
-            v-if="tabs === 1"
-            :key="1"
-            :value="1"
-            style="width: 100%"
-          >
+          <v-tabs-window-item v-if="tabs === 1" :key="1" :value="1" style="width: 100%">
             <v-container style="padding-top: 0">
               <PostComponents />
             </v-container>
           </v-tabs-window-item>
 
-          <v-tabs-window-item
-            v-if="tabs === 2"
-            :key="2"
-            :value="2"
-            style="width: 100%"
-          >
+          <v-tabs-window-item v-if="tabs === 2" :key="2" :value="2" style="width: 100%">
             <v-container style="padding-top: 0">
               <FriendsComponents />
             </v-container>
           </v-tabs-window-item>
 
-          <v-tabs-window-item
-            v-if="tabs === 3"
-            :key="3"
-            :value="3"
-            style="width: 100%"
-          >
+          <v-tabs-window-item v-if="tabs === 3" :key="3" :value="3" style="width: 100%">
             <v-container style="padding-top: 0">
               <AboutComponents />
             </v-container>

@@ -59,7 +59,7 @@
             <v-col>
               <v-icon @click="updateReactCounter(post.postId, post.reactionCount + 1)" size="32"
                 color="red">mdi-heart</v-icon>
-              {{ post.reactionCount }}
+              {{ post.reactionCount || 0 }}
             </v-col>
             <v-col>
               <v-icon size="32" color="blue" @click="toggleComments">mdi-comment-outline</v-icon>
